@@ -1,8 +1,6 @@
 <template>
   <v-app>
-    <div class="weather-widget">
-      <CitiesList v-if="isLoaded" :cities="cities" />
-    </div>
+    <CitiesList v-if="isLoaded" :cities="cities" />
   </v-app>
 </template>
 
@@ -117,8 +115,10 @@ export default {
 }
 </script>
 
-<style>
-.weather-widget {
-  background: antiquewhite;
+<style scoped lang="scss">
+::v-deep .v-application--wrap {
+  width: 250px;
+  max-width: 250px;
+  min-height: fit-content;
 }
 </style>
