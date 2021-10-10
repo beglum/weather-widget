@@ -45,7 +45,6 @@ export default {
   },
   methods: {
     toggleUpdate() {
-      console.log('test');
       this.isUpdating = !this.isUpdating;
     },
     dragStart(el, id) {
@@ -55,9 +54,6 @@ export default {
     dragEnd() {
       console.log('end')
     },
-    someDummyMethod() {
-      console.log('Hello from someDummyMethod');
-    }
   },
 }
 </script>

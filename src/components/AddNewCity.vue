@@ -7,13 +7,13 @@
             single
             label="New city name"
             v-model="name"
-            :loading="isFetching"
-            :color="newCityStatusColor"
-            :error-messages="errorMessage"
+            :loading="searchCity.isFetching"
+            :color="searchCityStatusColor"
+            :error-messages="searchCity.errorMessage"
             @keydown="onInput"
           >
             <template v-slot:append-outer>
-              <v-btn :disabled="!isCityFounded" icon @click="addNewCity">
+              <v-btn :disabled="!searchCity.isFounded" icon @click="addNewCity">
                 <v-icon color="primary">mdi-send</v-icon>
               </v-btn>
             </template>
@@ -25,86 +25,27 @@
 </template>
 
 <script>
-import { debounce } from 'vue-debounce'
-
-import fetchActions from "@/mixins/fetchActions";
+import searchCityController from "@/mixins/searchCityController";
 import { eventBus } from "@/main";
 
 export default {
   name: "AddNewCity",
-  mixins: [fetchActions],
+  mixins: [searchCityController],
   data: () => ({
     name: '',
-    isFetching: false,
-    status: 1,
-    newCityData: {},
-    enums: {
-      SEARCH_DEFAULT: 1,
-      SEARCH_SUCCESS: 2,
-      SEARCH_ERROR: 3,
-    },
-    errorMessage: '',
   }),
-  computed: {
-    newCityStatusColor() {
-      switch (this.status) {
-        case this.enums.SEARCH_SUCCESS:
-          return 'green';
-        case this.enums.SEARCH_ERROR:
-          return 'red';
-        default:
-          return 'primary';
-      }
-    },
-    isCityFounded() {
-      return this.status === this.enums.SEARCH_SUCCESS;
-    },
-  },
   methods: {
-    getNewCity: debounce((vm) => {
-      vm.fetchWeatherApi({q: vm.name})
-        .then(res => {
-          if (res.cod === 200) {
-            vm.status = vm.enums.SEARCH_SUCCESS;
-            vm.newCityData = res;
-          } else {
-            vm.searchError(res);
-          }
-        })
-        .catch(e => vm.searchError(e))
-        .finally(() => vm.stopFetching())
-    }, '600ms'),
-    onInput(event) {
-      // Если не нажат Enter, то мы ищем информацию по городу
-      if (event.keyCode !== 13 && this.name) {
-        this.startFetching();
-        return
-      }
+    onInput(e) {
+      let result = this.searchCityOnInput(e, this.name);
 
-      // При Enter мы сохраняем выбранный город
-      if (!this.isFetching && this.isCityFounded) {
-        this.addNewCity();
+      if (result) {
+        this.addNewCity(result);
       }
-
-      this.status = this.enums.SEARCH_DEFAULT;
     },
-    addNewCity() {
+    addNewCity(cityData) {
       this.name = '';
-      eventBus.$emit('addNewCity', this.newCityData);
+      eventBus.$emit('addNewCity', cityData);
     },
-    startFetching() {
-      this.isFetching = true;
-      this.errorMessage = '';
-      this.getNewCity(this);
-    },
-    stopFetching() {
-      this.isFetching = false;
-    },
-    searchError(error) {
-      this.status = this.enums.SEARCH_ERROR;
-      this.errorMessage = error.message;
-      console.error('[FIND CITY ERROR]: ' + error.message);
-    }
   }
 }
 </script>

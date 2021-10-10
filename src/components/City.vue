@@ -84,10 +84,8 @@
 <script>
 export default {
   data: () => ({
-    rules: [
-      value => !!value || 'Required.',
-      value => (value && value.length >= 3) || 'Min 3 characters',
-    ],
+    newCityName: '',
+    isNameChanged: true,
   }),
   props: {
     city: Object,
@@ -95,6 +93,20 @@ export default {
     isUpdating: Boolean,
   },
   computed: {
+    cityName: {
+      get() {
+        return this.isNameChanged ? this.newCityName : this.city.name;
+      },
+      set(value) {
+        if (this.newCityName === this.city.name) {
+          this.isNameChanged = false;
+          return
+        }
+
+        this.isNameChanged = true;
+        this.newCityName = value;
+      }
+    },
     cloudIcon() {
       return 'https://openweathermap.org/img/wn/' + this.city.weather[0].icon + '.png';
     },
