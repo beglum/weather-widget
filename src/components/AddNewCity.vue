@@ -3,21 +3,11 @@
     <v-card-text>
       <v-row>
         <v-col cols="12">
-          <v-text-field
-            single
-            label="New city name"
-            v-model="name"
-            :loading="searchCityData.isFetching"
-            :color="searchCityStatusColor"
-            :error-messages="searchCityData.errorMessage"
-            @keydown.enter="onSubmit"
-          >
-            <template v-slot:append-outer>
-              <v-btn :disabled="!searchCityIsFounded" icon @click="addNewCity">
-                <v-icon color="primary">{{ icons.mdiKeyboardReturn }}</v-icon>
-              </v-btn>
-            </template>
-          </v-text-field>
+          <search-city
+            :is-clean-field="true"
+            :is-label-on-top="true"
+            @submit-new-city="addNewCity"
+          />
         </v-col>
       </v-row>
     </v-card-text>
@@ -25,35 +15,25 @@
 </template>
 
 <script>
-import searchCityController from "@/mixins/searchCityController";
 import { eventBus } from "@/main";
 import { mdiKeyboardReturn } from '@mdi/js'
+import SearchCity from "./wrapping/SearchCity";
 
 export default {
   name: "AddNewCity",
-  mixins: [searchCityController],
+  components: {
+    SearchCity,
+  },
   data: () => ({
     name: '',
     icons: {
       mdiKeyboardReturn,
     }
   }),
-  watch: {
-    name(newVal) {
-      if (newVal) {
-        this.searchCity(newVal);
-      }
-    },
-  },
   methods: {
-    onSubmit() {
-      if (this.searchCityIsFounded) {
-        this.addNewCity();
-      }
-    },
-    addNewCity() {
+    addNewCity(city) {
       this.name = '';
-      eventBus.$emit('addNewCity', this.searchCityData.city);
+      eventBus.$emit('addNewCity', city);
     },
   }
 };

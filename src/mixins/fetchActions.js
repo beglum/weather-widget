@@ -4,6 +4,11 @@ const UNITS = 'metric';
 
 export default {
   methods: {
+    /**
+     * Запрос к openweathermap для получения данных о городе
+     * @param payload
+     * @return {Promise<unknown>}
+     */
     fetchWeatherApi(payload) {
       return new Promise((resolve, reject) => {
         let query = this.toQueryString({
