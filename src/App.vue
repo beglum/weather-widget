@@ -1,7 +1,6 @@
 <template>
   <v-app>
     <CitiesList v-if="isLoaded" :cities="cities" />
-    <DragAndDropTest />
   </v-app>
 </template>
 
@@ -10,7 +9,6 @@ import localStorage, {CITIES} from "@/mixins/localStorage";
 import fetchActions from "@/mixins/fetchActions";
 
 import CitiesList from "@/components/CitiesList";
-import DragAndDropTest from "@/components/DragAndDropTest";
 
 import { eventBus } from "@/main";
 
@@ -25,7 +23,6 @@ export default {
   }),
   components: {
     CitiesList,
-    DragAndDropTest,
   },
   watch: {
     cities: {
