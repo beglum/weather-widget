@@ -1,17 +1,17 @@
 <template>
-  <v-card>
-    <v-card-text class="text-h6">
+  <v-card ref="cardBlock">
+    <v-card-text v-if="!isUpdating" class="text-h6">
       <v-row>
         <v-col cols="9">{{city.name}}, {{city.sys.country}}</v-col>
-        <v-col cols="3">
-          <v-app-bar-nav-icon v-if="isUpdating"></v-app-bar-nav-icon>
-          <v-btn icon v-if="!isUpdating" @click="$emit('toggle-update')">
+        <v-col cols="3" v-if="isMain">
+          <v-btn icon @click="$emit('toggle-update')">
             <v-icon>mdi-cog</v-icon>
           </v-btn>
         </v-col>
       </v-row>
     </v-card-text>
-    <v-card-text>
+
+    <v-card-text v-else>
       <v-row>
           <v-col cols="12">
             <v-text-field
@@ -25,40 +25,16 @@
                 </v-btn>
               </template>
               <template v-slot:prepend>
-                <v-btn icon @mousedown="dragStart" @mouseup="dragEnd">
+                <v-btn
+                  icon
+                  @mousedown="dragStart"
+                  @mouseup="dragEnd"
+                >
                   <v-icon>mdi-drag-horizontal-variant</v-icon>
                 </v-btn>
               </template>
             </v-text-field>
           </v-col>
-<!--          <div>
-            <v-icon>mdi-drag-horizontal-variant</v-icon>
-          </div>
-          <div>
-            <v-text-field
-              label="City name"
-              :rules="rules"
-              hide-details="auto"
-            ></v-text-field>
-          </div>
-          <div>
-            <v-btn icon @click="$emit('toggle-update')">
-              <v-icon>mdi-bucket</v-icon>
-            </v-btn>
-          </div>-->
-<!--        <v-col cols="2"><v-app-bar-nav-icon /></v-col>
-        <v-col cols="8">
-          <v-text-field
-            label="City name"
-            :rules="rules"
-            hide-details="auto"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="2">
-          <v-btn icon @click="$emit('toggle-update')">
-            <v-icon>mdi-bucket</v-icon>
-          </v-btn>
-        </v-col>-->
       </v-row>
     </v-card-text>
 
@@ -103,17 +79,6 @@
       </v-list-item>
     </div>
   </v-card>
-
-<!--  <v-card v-else>
-    <v-card-text class="text-h6">
-      <v-row align="center">
-        <v-col cols="9">{{city.name}}, {{city.sys.country}}</v-col>
-        <v-col cols="3">
-          <v-icon @click="$emit('toggle-update')" class="settings" right>mdi-menu</v-icon>
-        </v-col>
-      </v-row>
-    </v-card-text>
-  </v-card>-->
 </template>
 
 <script>
@@ -150,16 +115,13 @@ export default {
     visibility() {
       return (this.city.visibility / 1000).toFixed(1);
     },
-    rawData() {
-      return JSON.stringify(this.city, null, 2);
-    }
   },
   methods: {
     dragStart() {
-      console.log('start');
+      this.$emit('dragStart', this.$refs.cardBlock.$el, this.city.id);
     },
     dragEnd() {
-      console.log('end')
+      this.$emit('dragEnd', this.city.id);
     },
     deleteCity() {
       console.log('delete city')

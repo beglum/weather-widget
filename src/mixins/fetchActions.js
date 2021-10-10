@@ -23,5 +23,18 @@ export default {
         }
       })
     },
+
+    /**
+     * Возвращает данные простого объекта в виде query string.
+     * Не поддерживает вложенные объекты.
+     * @param queryObject {object}
+     * @returns {string}
+     */
+    toQueryString(queryObject) {
+      return '?' + Object.keys(queryObject).reduce((acc, key) => {
+        acc.push(`${key}=${queryObject[key]}`);
+        return acc;
+      }, []).join('&');
+    }
   }
 }

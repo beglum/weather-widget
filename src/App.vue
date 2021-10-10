@@ -1,6 +1,7 @@
 <template>
   <v-app>
     <CitiesList v-if="isLoaded" :cities="cities" />
+    <DragAndDropTest />
   </v-app>
 </template>
 
@@ -9,6 +10,9 @@ import localStorage, {CITIES} from "@/mixins/localStorage";
 import fetchActions from "@/mixins/fetchActions";
 
 import CitiesList from "@/components/CitiesList";
+import DragAndDropTest from "@/components/DragAndDropTest";
+
+import { eventBus } from "@/main";
 
 export default {
   name: 'App',
@@ -21,6 +25,7 @@ export default {
   }),
   components: {
     CitiesList,
+    DragAndDropTest,
   },
   watch: {
     cities: {
@@ -31,7 +36,6 @@ export default {
     }
   },
   created() {
-    console.log('1');
     this.initOtherFiles();
     //window.localStorage.clear();
     this.loadLocalStorage();
@@ -39,6 +43,12 @@ export default {
       this.getUserCoords();
     }
     this.updateWeatherData();
+
+    eventBus.$on('addNewCity', data => {
+      console.log('Добавлен новый город')
+      console.log(data)
+      this.createNewCity(data);
+    })
   },
   mounted() {
     this.isLoaded = true;
@@ -83,6 +93,9 @@ export default {
       }
     },
 
+    /**
+     * Инициализируем автоматический импорт необходимых шрифтов
+     */
     initOtherFiles() {
       let googleFonts = document.createElement('link');
       googleFonts.setAttribute(
@@ -97,19 +110,6 @@ export default {
         'https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css'
       );
       document.head.appendChild(materialIcons);
-    },
-
-    /**
-     * Возвращает данные простого объекта в виде query string.
-     * Не поддерживает вложенные объекты.
-     * @param queryObject {object}
-     * @returns {string}
-     */
-    toQueryString(queryObject) {
-      return '?' + Object.keys(queryObject).reduce((acc, key) => {
-        acc.push(`${key}=${queryObject[key]}`);
-        return acc;
-      }, []).join('&');
     }
   },
 }
