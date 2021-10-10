@@ -14,7 +14,7 @@
           >
             <template v-slot:append-outer>
               <v-btn :disabled="!searchCityIsFounded" icon @click="addNewCity">
-                <v-icon color="primary">mdi-send</v-icon>
+                <v-icon color="primary">mdi-keyboard-return</v-icon>
               </v-btn>
             </template>
           </v-text-field>

@@ -40,6 +40,7 @@
         <span>{{city.wind.speed}}m/s</span>
       </v-list-item-subtitle>
       <v-list-item-subtitle>
+        <v-icon left>mdi-speedometer</v-icon>
         <span>{{city.main.pressure}}hPa</span>
       </v-list-item-subtitle>
     </v-list-item>

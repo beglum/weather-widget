@@ -15,7 +15,7 @@
         >
           <template v-slot:append-outer>
             <v-btn v-if="isNameChanged" :disabled="!searchCityIsFounded" icon @click="changeCity">
-              <v-icon color="primary">mdi-send</v-icon>
+              <v-icon color="primary">mdi-keyboard-return</v-icon>
             </v-btn>
 
             <v-btn v-else icon @click="deleteCity">
