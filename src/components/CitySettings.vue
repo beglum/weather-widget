@@ -4,11 +4,21 @@
       <v-col cols="12">
         <v-text-field
           single-line
-          label="City name"
-          :value="city.name"
+
+          label="New city name"
+          v-model="cityName"
+
+          :loading="searchCityData.isFetching"
+          :color="searchCityStatusColor"
+          :error-messages="searchCityData.errorMessage"
+          @keydown.enter.exact="onSubmit"
         >
           <template v-slot:append-outer>
-            <v-btn icon @click="deleteCity">
+            <v-btn v-if="isNameChanged" :disabled="!searchCityIsFounded" icon @click="changeCity">
+              <v-icon color="primary">mdi-send</v-icon>
+            </v-btn>
+
+            <v-btn v-else icon @click="deleteCity">
               <v-icon>mdi-bucket</v-icon>
             </v-btn>
           </template>
@@ -19,15 +29,23 @@
 </template>
 
 <script>
+import searchCityController from "@/mixins/searchCityController";
+import { eventBus } from "@/main";
 
 export default {
-  name: "CitySettings",
+  name: "Settings",
+  mixins: [searchCityController],
   data: () => ({
     newCityName: '',
-    isNameChanged: true,
+    isNameChanged: false,
   }),
   props: {
     city: Object,
+  },
+  watch: {
+    newCityName(newVal) {
+      this.searchCity(newVal);
+    },
   },
   computed: {
     cityName: {
@@ -35,11 +53,6 @@ export default {
         return this.isNameChanged ? this.newCityName : this.city.name;
       },
       set(value) {
-        if (this.newCityName === this.city.name) {
-          this.isNameChanged = false;
-          return
-        }
-
         this.isNameChanged = true;
         this.newCityName = value;
       }
@@ -47,8 +60,20 @@ export default {
   },
   methods: {
     deleteCity() {
-      console.log('delete city')
-    }
+      eventBus.$emit('deleteCity', this.city);
+    },
+    onSubmit() {
+      if (this.searchCityData.isFounded) {
+        this.changeCity();
+      }
+    },
+    changeCity() {
+      this.isNameChanged = false;
+      eventBus.$emit('changeCity', {
+        oldCityId: this.city.id,
+        newCityData: this.searchCityData.city
+      });
+    },
   },
 }
 </script>

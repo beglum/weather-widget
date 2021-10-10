@@ -45,9 +45,21 @@ export default {
     this.updateWeatherData();
 
     eventBus.$on('addNewCity', data => {
-      console.log('Добавлен новый город')
-      console.log(data)
       this.createNewCity(data);
+    })
+
+    eventBus.$on('changeCity', data => {
+      try {
+        let oldCity = this.cities.find(city => city.id === data.oldCityId);
+        this.updateCity(oldCity, data.newCityData);
+      } catch (e) {
+        console.error('CHANGE CITY ERROR: ', e)
+      }
+    })
+
+    eventBus.$on('deleteCity', city => {
+      let index = this.cities.indexOf(city);
+      this.cities.splice(index, 1);
     })
   },
   mounted() {
@@ -82,10 +94,8 @@ export default {
       });
     },
     createNewCity(data) {
-      this[CITIES].push({
-        ...data,
-        updated: Date.now(),
-      });
+      data.updated = Date.now();
+      this[CITIES].push(data);
     },
     updateCity(city, data) {
       for (let key in data) {

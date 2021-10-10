@@ -54,7 +54,7 @@
 import { eventBus } from "@/main";
 
 export default {
-  name: "CityData",
+  name: "Data",
   props: {
     city: Object,
     isMain: Boolean,

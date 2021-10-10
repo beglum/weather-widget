@@ -9,19 +9,20 @@ const SEARCH_ERROR = 3;
 export default {
   mixins: [fetchActions],
   data: () => ({
-    searchCity: {
+    searchCityData: {
       isFetching: false,
       city: {},
       errorMessage: '',
       status: SEARCH_DEFAULT,
+      cityName: '',
     }
   }),
   computed: {
     searchCityIsFounded() {
-      return this.searchCity.status === SEARCH_SUCCESS;
+      return this.searchCityData.status === SEARCH_SUCCESS;
     },
     searchCityStatusColor() {
-      switch (this.searchCity.status) {
+      switch (this.searchCityData.status) {
         case SEARCH_SUCCESS:
           return 'green';
         case SEARCH_ERROR:
@@ -33,36 +34,26 @@ export default {
   },
   methods: {
     /**
-     * Инициализирует поиск города. При возврате объекта означает возможность создания нового города
-     * @param event
+     * Инициализирует поиск города
      * @param cityName
-     * @return false/object
+     * @return void
      */
-    searchCityOnInput(event, cityName) {
-      // Если не нажат Enter, то мы ищем информацию по городу
-      if (event.keyCode !== 13 && cityName) {
-        this.searchCity.status = SEARCH_DEFAULT;
-        this.$_searchCity_startFetching();
-        return false;
-      }
-
-      // При Enter мы сохраняем выбранный город
-      if (!this.searchCity.isFetching && this.searchCityIsFounded) {
-        this.searchCity.status = SEARCH_DEFAULT;
-        return this.searchCity.city;
-      }
+    searchCity(cityName) {
+      this.searchCityData.status = SEARCH_DEFAULT;
+      this.searchCityData.cityName = cityName;
+      this.$_searchCity_startFetching();
     },
     $_searchCity_startFetching() {
-      this.searchCity.isFetching = true;
-      this.searchCity.errorMessage = '';
+      this.searchCityData.isFetching = true;
+      this.searchCityData.errorMessage = '';
       this.$_searchCity_getNewCity(this);
     },
     $_searchCity_getNewCity: debounce((vm) => {
-      vm.fetchWeatherApi({q: vm.name})
+      vm.fetchWeatherApi({ q: vm.searchCityData.cityName })
         .then(res => {
           if (res.cod === 200) {
-            vm.searchCity.status = SEARCH_SUCCESS;
-            vm.searchCity.city = res;
+            vm.searchCityData.status = SEARCH_SUCCESS;
+            vm.searchCityData.city = res;
           } else {
             vm.$_searchCity_onSearchError(res.message);
           }
@@ -71,11 +62,11 @@ export default {
         .finally(() => vm.$_searchCity_onStopFetching())
     }, '600ms'),
     $_searchCity_onStopFetching() {
-      this.searchCity.isFetching = false;
+      this.searchCityData.isFetching = false;
     },
     $_searchCity_onSearchError(error) {
-      this.searchCity.status = SEARCH_ERROR;
-      this.searchCity.errorMessage = error;
+      this.searchCityData.status = SEARCH_ERROR;
+      this.searchCityData.errorMessage = error;
       console.error('[FIND CITY ERROR]: ' + error);
     }
   }

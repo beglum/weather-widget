@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card class="mb-5">
     <v-card-text>
       <v-row>
         <v-col cols="12">
@@ -7,13 +7,13 @@
             single
             label="New city name"
             v-model="name"
-            :loading="searchCity.isFetching"
+            :loading="searchCityData.isFetching"
             :color="searchCityStatusColor"
-            :error-messages="searchCity.errorMessage"
-            @keydown="onInput"
+            :error-messages="searchCityData.errorMessage"
+            @keydown.enter.exact="onSubmit"
           >
             <template v-slot:append-outer>
-              <v-btn :disabled="!searchCity.isFounded" icon @click="addNewCity">
+              <v-btn :disabled="!searchCityIsFounded" icon @click="addNewCity">
                 <v-icon color="primary">mdi-send</v-icon>
               </v-btn>
             </template>
@@ -34,17 +34,22 @@ export default {
   data: () => ({
     name: '',
   }),
-  methods: {
-    onInput(e) {
-      let result = this.searchCityOnInput(e, this.name);
-
-      if (result) {
-        this.addNewCity(result);
+  watch: {
+    name(newVal) {
+      if (newVal) {
+        this.searchCity(newVal);
       }
     },
-    addNewCity(cityData) {
+  },
+  methods: {
+    onSubmit() {
+      if (this.searchCityData.isFounded) {
+        this.addNewCity();
+      }
+    },
+    addNewCity() {
       this.name = '';
-      eventBus.$emit('addNewCity', cityData);
+      eventBus.$emit('addNewCity', this.searchCityData.city);
     },
   }
 }

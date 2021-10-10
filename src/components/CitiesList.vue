@@ -1,6 +1,6 @@
 <template>
   <v-main>
-    <v-toolbar dense flat class="mb-5" v-if="isUpdating">
+    <v-toolbar dense flat class="mb-3" v-if="isUpdating">
       <v-toolbar-title>Settings</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn icon @click="toggleUpdate">
@@ -15,7 +15,7 @@
       :isMain="!index"
       :isUpdating="isUpdating"
     />
-    <AddNewCity v-if="isUpdating" />
+    <AddNewCity v-if="isUpdating || cities.length === 0" />
   </v-main>
 </template>
 
