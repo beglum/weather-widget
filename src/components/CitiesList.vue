@@ -1,6 +1,6 @@
 <template>
   <v-main>
-    <v-toolbar dense flat v-if="isUpdating">
+    <v-toolbar dense flat class="mb-5" v-if="isUpdating">
       <v-toolbar-title>Settings</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn icon @click="toggleUpdate">
@@ -11,17 +11,9 @@
       v-for="(city, index) of cities"
       :key="index"
 
-      :class="{
-        'dragging': city.id === draggableElementId,
-      }"
-
       :city="city"
       :isMain="!index"
       :isUpdating="isUpdating"
-
-      @toggle-update="toggleUpdate"
-      @dragStart="dragStart"
-      @dragEnd="dragEnd"
     />
     <AddNewCity v-if="isUpdating" />
   </v-main>
@@ -30,6 +22,7 @@
 <script>
 import City from "@/components/City";
 import AddNewCity from "./AddNewCity";
+import { eventBus } from "@/main";
 export default {
   components: {
     AddNewCity,
@@ -37,29 +30,21 @@ export default {
   },
   data: () => ({
     isUpdating: false,
-    componentInstance: this,
-    draggableElementId: -1,
   }),
   props: {
     cities: Array,
+  },
+  created() {
+    eventBus.$on('toggle-update', () => {
+      this.toggleUpdate();
+    })
   },
   methods: {
     toggleUpdate() {
       this.isUpdating = !this.isUpdating;
     },
-    dragStart(el, id) {
-      console.log(el)
-      this.draggableElementId = id;
-    },
-    dragEnd() {
-      console.log('end')
-    },
   },
 }
 </script>
 
-<style lang="scss">
-.dragging {
-  opacity: 0.3;
-}
-</style>
+<style lang="scss"></style>
