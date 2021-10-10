@@ -1,23 +1,37 @@
 <template>
   <v-main>
-    <v-toolbar dense flat class="mb-3" v-if="isUpdating">
+    <v-toolbar
+      dense
+      flat
+      class="mb-3"
+      v-if="isUpdating"
+    >
       <v-toolbar-title>Settings</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn icon @click="toggleUpdate">
         <v-icon>mdi-cog-off</v-icon>
       </v-btn>
     </v-toolbar>
-    <draggable :list="cities" handle=".handle">
-      <City
-        v-for="(city, index) of cities"
-        :key="index"
+    <draggable
+      handle=".handle"
 
-        :city="city"
-        :isMain="!index"
-        :isUpdating="isUpdating"
-      />
+      :list="cities"
+      v-bind="dragOptions"
+    >
+      <transition-group>
+        <City
+          v-for="(city, index) of cities"
+          :key="city.uid"
+
+          :city="city"
+          :isMain="!index"
+          :isUpdating="isUpdating"
+        />
+      </transition-group>
     </draggable>
-    <AddNewCity v-if="isUpdating || cities.length === 0" />
+    <AddNewCity
+      v-if="isUpdating || cities.length === 0"
+    />
   </v-main>
 </template>
 
@@ -34,6 +48,12 @@ export default {
   },
   data: () => ({
     isUpdating: false,
+    dragOptions: {
+      animation: 200,
+      group: 'description',
+      disabled: false,
+      ghostClass: 'ghost',
+    }
   }),
   props: {
     cities: Array,
@@ -51,4 +71,8 @@ export default {
 }
 </script>
 
-<style lang="scss"></style>
+<style lang="scss" scoped>
+.ghost {
+  opacity: .5;
+}
+</style>

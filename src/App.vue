@@ -92,6 +92,7 @@ export default {
     },
     createNewCity(data) {
       data.updated = Date.now();
+      data.uid = Math.random() * 1000;
       this[CITIES].push(data);
     },
     updateCity(city, data) {
