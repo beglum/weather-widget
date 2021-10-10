@@ -4,7 +4,7 @@
       <v-toolbar-title>Settings</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn icon @click="toggleUpdate">
-        <v-icon>mdi-cog</v-icon>
+        <v-icon>mdi-cog-off</v-icon>
       </v-btn>
     </v-toolbar>
     <City

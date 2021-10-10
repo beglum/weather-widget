@@ -10,7 +10,7 @@
             :loading="searchCityData.isFetching"
             :color="searchCityStatusColor"
             :error-messages="searchCityData.errorMessage"
-            @keydown.enter.exact="onSubmit"
+            @keydown.enter="onSubmit"
           >
             <template v-slot:append-outer>
               <v-btn :disabled="!searchCityIsFounded" icon @click="addNewCity">
@@ -43,7 +43,7 @@ export default {
   },
   methods: {
     onSubmit() {
-      if (this.searchCityData.isFounded) {
+      if (this.searchCityIsFounded) {
         this.addNewCity();
       }
     },

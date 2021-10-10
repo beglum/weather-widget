@@ -11,7 +11,7 @@
           :loading="searchCityData.isFetching"
           :color="searchCityStatusColor"
           :error-messages="searchCityData.errorMessage"
-          @keydown.enter.exact="onSubmit"
+          @keydown.enter="onSubmit"
         >
           <template v-slot:append-outer>
             <v-btn v-if="isNameChanged" :disabled="!searchCityIsFounded" icon @click="changeCity">
@@ -63,7 +63,8 @@ export default {
       eventBus.$emit('deleteCity', this.city);
     },
     onSubmit() {
-      if (this.searchCityData.isFounded) {
+      console.log('test')
+      if (this.searchCityIsFounded) {
         this.changeCity();
       }
     },
