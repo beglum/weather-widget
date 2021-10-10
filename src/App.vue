@@ -33,7 +33,6 @@ export default {
     }
   },
   created() {
-    this.initOtherFiles();
     //window.localStorage.clear();
     this.loadLocalStorage();
     if (!this[CITIES].length) {
@@ -100,25 +99,6 @@ export default {
         city[key] = data[key];
       }
     },
-
-    /**
-     * Инициализируем автоматический импорт необходимых шрифтов
-     */
-    initOtherFiles() {
-      let googleFonts = document.createElement('link');
-      googleFonts.setAttribute(
-        'href',
-        'https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900'
-      );
-      document.head.appendChild(googleFonts);
-
-      let materialIcons = document.createElement('link');
-      materialIcons.setAttribute(
-        'href',
-        'https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css'
-      );
-      document.head.appendChild(materialIcons);
-    }
   },
 }
 </script>

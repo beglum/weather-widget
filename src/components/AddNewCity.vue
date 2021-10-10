@@ -14,7 +14,7 @@
           >
             <template v-slot:append-outer>
               <v-btn :disabled="!searchCityIsFounded" icon @click="addNewCity">
-                <v-icon color="primary">mdi-keyboard-return</v-icon>
+                <v-icon color="primary">{{ icons.mdiKeyboardReturn }}</v-icon>
               </v-btn>
             </template>
           </v-text-field>
@@ -27,12 +27,16 @@
 <script>
 import searchCityController from "@/mixins/searchCityController";
 import { eventBus } from "@/main";
+import { mdiKeyboardReturn } from '@mdi/js'
 
 export default {
   name: "AddNewCity",
   mixins: [searchCityController],
   data: () => ({
     name: '',
+    icons: {
+      mdiKeyboardReturn,
+    }
   }),
   watch: {
     name(newVal) {
@@ -52,7 +56,7 @@ export default {
       eventBus.$emit('addNewCity', this.searchCityData.city);
     },
   }
-}
+};
 </script>
 
 <style scoped>

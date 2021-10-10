@@ -9,7 +9,7 @@
       <v-toolbar-title>Settings</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn icon @click="toggleUpdate">
-        <v-icon>mdi-cog-off</v-icon>
+        <v-icon>{{ icons.mdiCogOff }}</v-icon>
       </v-btn>
     </v-toolbar>
     <draggable
@@ -40,6 +40,8 @@ import City from "@/components/City";
 import AddNewCity from "@/components/AddNewCity";
 import draggable from 'vuedraggable';
 import { eventBus } from "@/main";
+import { mdiCogOff } from '@mdi/js';
+
 export default {
   components: {
     AddNewCity,
@@ -53,6 +55,9 @@ export default {
       group: 'description',
       disabled: false,
       ghostClass: 'ghost',
+    },
+    icons: {
+      mdiCogOff
     }
   }),
   props: {

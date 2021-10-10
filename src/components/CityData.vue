@@ -5,7 +5,7 @@
         <v-col class="text-h6" cols="9">{{city.name}}, {{city.sys.country}}</v-col>
         <v-col cols="3" v-if="isMain">
           <v-btn icon @click="toggleUpdate">
-            <v-icon>mdi-cog</v-icon>
+            <v-icon>{{ icons.mdiCog }}</v-icon>
           </v-btn>
         </v-col>
       </v-row>
@@ -36,11 +36,11 @@
         <v-icon
           left
           :style="'transform: rotate('+ city.wind.deg +'deg)'"
-        >mdi-navigation</v-icon>
+        >{{ icons.mdiNavigation }}</v-icon>
         <span>{{city.wind.speed}}m/s</span>
       </v-list-item-subtitle>
       <v-list-item-subtitle>
-        <v-icon left>mdi-speedometer</v-icon>
+        <v-icon left>{{ icons.mdiSpeedometer }}</v-icon>
         <span>{{city.main.pressure}}hPa</span>
       </v-list-item-subtitle>
     </v-list-item>
@@ -53,9 +53,17 @@
 
 <script>
 import { eventBus } from "@/main";
+import { mdiSpeedometer, mdiNavigation, mdiCog } from '@mdi/js'
 
 export default {
   name: "Data",
+  data: () => ({
+    icons: {
+      mdiSpeedometer,
+      mdiNavigation,
+      mdiCog
+    }
+  }),
   props: {
     city: Object,
     isMain: Boolean,
