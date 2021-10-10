@@ -39,7 +39,7 @@ export default {
     this.initOtherFiles();
     //window.localStorage.clear();
     this.loadLocalStorage();
-    if (!this.cities.length) {
+    if (!this[CITIES].length) {
       this.getUserCoords();
     }
     this.updateWeatherData();
@@ -50,7 +50,7 @@ export default {
 
     eventBus.$on('changeCity', data => {
       try {
-        let oldCity = this.cities.find(city => city.id === data.oldCityId);
+        let oldCity = this[CITIES].find(city => city.id === data.oldCityId);
         this.updateCity(oldCity, data.newCityData);
       } catch (e) {
         console.error('CHANGE CITY ERROR: ', e)
@@ -58,8 +58,8 @@ export default {
     })
 
     eventBus.$on('deleteCity', city => {
-      let index = this.cities.indexOf(city);
-      this.cities.splice(index, 1);
+      let index = this[CITIES].indexOf(city);
+      this[CITIES].splice(index, 1);
     })
   },
   mounted() {

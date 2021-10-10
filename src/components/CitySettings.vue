@@ -63,7 +63,6 @@ export default {
       eventBus.$emit('deleteCity', this.city);
     },
     onSubmit() {
-      console.log('test')
       if (this.searchCityIsFounded) {
         this.changeCity();
       }

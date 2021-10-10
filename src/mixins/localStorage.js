@@ -22,7 +22,6 @@ export default {
       })
     },
     saveStorage(key) {
-      console.log('save storage');
       window.localStorage.setItem(`${PREFIX}${key}`, JSON.stringify(this[key]));
     },
   }
